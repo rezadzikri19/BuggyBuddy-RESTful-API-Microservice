@@ -1,25 +1,26 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from ..entities.bug_report_entity import RawBugReportEntity
+from ...core.entities.bug_report_entity import RawBugReportEntity
+from ...core.dtos.report_preprocess_dto import DropFeaturesDTO, AggregateTextDTO, CleanSentenceDTO, RemoveStopwordsDTO, GenerateSentEmbeddingDTO
 
-class DataPreprocessorPort(ABC):
+class ReportPreprocessorPort(ABC):
   @abstractmethod
-  def drop_features(self, data: RawBugReportEntity, features_to_drop: List[str]):
+  def drop_features(self, data: RawBugReportEntity, features_to_drop: List[str]) -> DropFeaturesDTO:
     pass
   
   @abstractmethod
-  def aggregate_text_features(self, data):
+  def aggregate_text_features(self, data) -> AggregateTextDTO:
     pass
   
   @abstractmethod
-  def clean_sentence(self, data):
+  def clean_sentence(self, data) -> CleanSentenceDTO:
     pass
   
   @abstractmethod
-  def remove_stopwords(self, data):
+  def remove_stopwords(self, data) -> RemoveStopwordsDTO:
     pass
   
   @abstractmethod
-  def generate_sent_embedding(self, data):
+  def generate_sent_embedding(self, data) -> GenerateSentEmbeddingDTO:
     pass
