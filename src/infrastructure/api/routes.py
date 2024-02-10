@@ -1,13 +1,13 @@
 from typing import List
 
-from ....core.usecases.report_crud_usecase import ReportCRUDUsecase
-from ....infrastructure.api.dtos.crud_dto import *
+from ...core.usecases.report_crud_usecase import ReportCRUDUsecase
+from ...infrastructure.api.api_dtos import *
 
 from fastapi import APIRouter
 
 router = APIRouter()
 
-class Routes():
+class ApiRoutes():
   def __init__(self, report_crud_usecase: ReportCRUDUsecase) -> None:
     self.report_crud_usecase = report_crud_usecase
   
