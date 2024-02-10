@@ -32,8 +32,8 @@ class BugReportUsecase:
     vector = self.report_vectorize_usecase.report_vectorize(report)
     vectorized_report = {**report, vector: vector}
     
-    result = self.report_crud_operator.create_report(vectorized_report)
-    return result
+    self.report_crud_operator.create_report(vectorized_report)
+    return report
   
 
   def update_report(self, query: GetReportQueryDTO, report: UpdateReportDTO):
@@ -45,8 +45,8 @@ class BugReportUsecase:
     vector = self.report_vectorize_usecase.report_vectorize(exist_report[0])
     vectorized_report = {**exist_report[0], **report, vector: vector}
     
-    result = self.report_crud_operator.update_report(query, vectorized_report)
-    return result
+    self.report_crud_operator.update_report(query['id'], vectorized_report)
+    return vectorized_report
   
   
   def delete_report(self, query: GetReportQueryDTO):
@@ -55,5 +55,5 @@ class BugReportUsecase:
     if not exist_report:
       raise Exception('report not found!')
     
-    self.report_crud_operator.delete_report(query)
+    self.report_crud_operator.delete_report(query['id'])
     return exist_report

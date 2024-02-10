@@ -1,8 +1,13 @@
+from typing import Dict, Any
+
 import re
 import nltk
 
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
+from pinecone import QueryResponse, Vector
+
+from ...core.entities.report_entity import VectorizedReportEntity
 
 nltk.download('stopwords')
 nltk.download('punkt')
@@ -24,3 +29,32 @@ def remove_stops(text: str):
   words = word_tokenize(text)
   filtered_words = [word for word in words if word not in stop_words]
   return ' '.join(filtered_words)
+
+
+def pinecone_response_to_report(response: QueryResponse) -> VectorizedReportEntity:
+  return VectorizedReportEntity(
+    id=response['id'],
+    component=response['metadata']['component'],
+    description=response['metadata']['description'],
+    platform=response['metadata']['platform'],
+    product=response['metadata']['product'],
+    summary=response['metadata']['summary'],
+    type=response['metadata']['type'],
+    vector=list(response['values'])
+  )
+  
+
+def report_to_pinecone_vector(report: VectorizedReportEntity) -> Dict[str, Any]:
+  return {
+      'id': report['id'],
+      'values': report['vector'],
+      'metadata': {
+        'id': report['id'],
+        'summary': report['summary'],
+        'description': report['description'],
+        'platform': report['platform'],
+        'product': report['product'],
+        'component': report['component'],
+        'type': report['type']
+      }
+    }
