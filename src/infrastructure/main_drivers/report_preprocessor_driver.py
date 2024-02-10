@@ -7,8 +7,6 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from sentence_transformers import SentenceTransformer
 
-from ...core.dtos.report_preprocess_dto import AggregateTextDTO
-
 from ...core.dtos.report_preprocess_dto import DropFeaturesDTO
 from ...core.entities.report_entity import RawReportEntity
 
