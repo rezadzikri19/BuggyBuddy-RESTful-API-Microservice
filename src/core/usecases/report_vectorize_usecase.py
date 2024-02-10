@@ -15,7 +15,9 @@ class ReportVectorizeUsecase:
     
   
   def report_vectorize(self, report: RawReportEntity) -> List[float]:
-    result = self.report_preprocessor.drop_features(report)
+    features_to_drop = ['id', 'status', 'priority', 'resolution', 'severity', 'component', 'product', 'type']
+    
+    result = self.report_preprocessor.drop_features(report, features_to_drop)
     result = self.report_preprocessor.aggregate_text_features(result)
     result = self.report_preprocessor.clean_sentence(result)
     result = self.report_preprocessor.remove_stopwords(result)
