@@ -1,6 +1,6 @@
 from typing import List, TypedDict
 
-class RawBugReportEntity(TypedDict):
+class RawReportEntity(TypedDict):
   id: int
   summary: str
   description: str
@@ -10,7 +10,7 @@ class RawBugReportEntity(TypedDict):
   type: str
     
     
-class VectorizedBugReportEntity(TypedDict):
+class VectorizedReportEntity(TypedDict):
   id: int
   summary: str
   description: str

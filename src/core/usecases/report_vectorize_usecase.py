@@ -1,11 +1,11 @@
 from typing import List
 
-from ..entities.bug_report_entity import RawBugReportEntity
+from ...core.entities.report_entity import RawReportEntity
 
 from ...core.ports.report_preprocessor_port import ReportPreprocessorPort
 from ...core.ports.revectorizer_port import RevectorizerPort
 
-class ReportVectorizingUsecase:
+class ReportVectorizeUsecase:
   def __init__(
       self,
       report_preprocessor: ReportPreprocessorPort,
@@ -14,7 +14,7 @@ class ReportVectorizingUsecase:
     self.revectorizer = revectorizer
     
   
-  def report_vectorize(self, report: RawBugReportEntity) -> List[float]:
+  def report_vectorize(self, report: RawReportEntity) -> List[float]:
     result = self.report_preprocessor.drop_features(report)
     result = self.report_preprocessor.aggregate_text_features(result)
     result = self.report_preprocessor.clean_sentence(result)

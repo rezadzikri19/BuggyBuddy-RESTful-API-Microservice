@@ -8,16 +8,6 @@ class GetReportQueryDTO(TypedDict):
   type: NotRequired[str]
 
 
-class CreateReportDTO(TypedDict):
-  id: int
-  summary: str
-  description: str
-  platform: str
-  product: str
-  component: str
-  type: str
-
-
 class UpdateReportDTO(TypedDict):
   id: NotRequired[int]
   summary: NotRequired[str]
