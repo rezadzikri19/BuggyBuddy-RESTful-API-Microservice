@@ -1,4 +1,4 @@
-from typing import List, TypedDict
+from typing import TypedDict
 
 class DropFeaturesDTO(TypedDict):
   summary: str

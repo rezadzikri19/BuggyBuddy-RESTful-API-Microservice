@@ -1,11 +1,13 @@
-from ...core.entities.report_entity import RawReportEntity
+from typing import List
 
-from ...core.dtos.report_crud_dto import GetReportQueryDTO, UpdateReportDTO
+from ...core.entities.report_entity import VectorizedReportEntity
+
+from ...core.dtos.report_crud_dto import GetReportQueryDTO, UpdateReportDTO, ReportDTO
 
 from ...core.ports.report_crud_operator_port import ReportCRUDOperatorPort
 from ...core.usecases.report_vectorize_usecase import ReportVectorizeUsecase
 
-class BugReportUsecase:
+class ReportCRUDUsecase:
   def __init__(
       self,
       report_crud_operator: ReportCRUDOperatorPort,
@@ -14,12 +16,12 @@ class BugReportUsecase:
     self.report_vectorize_usecase = report_vectorize_usecase
   
   
-  def get_reports(self, query: GetReportQueryDTO) -> RawReportEntity:
+  def get_reports(self, query: GetReportQueryDTO) -> VectorizedReportEntity:
     result = self.report_crud_operator.get_reports(query)
     return result
   
   
-  def get_similar_reports(self, report: RawReportEntity):
+  def get_similar_reports(self, report: ReportDTO) -> List[VectorizedReportEntity]:
     vector = self.report_vectorize_usecase.report_vectorize(report)
     vectorized_report = {**report, vector: vector}
     
@@ -28,7 +30,7 @@ class BugReportUsecase:
     return result
   
   
-  def create_new_report(self, report: RawReportEntity):
+  def create_new_report(self, report: ReportDTO) -> VectorizedReportEntity:
     vector = self.report_vectorize_usecase.report_vectorize(report)
     vectorized_report = {**report, vector: vector}
     
@@ -36,7 +38,7 @@ class BugReportUsecase:
     return report
   
 
-  def update_report(self, query: GetReportQueryDTO, report: UpdateReportDTO):
+  def update_report(self, query: GetReportQueryDTO, report: UpdateReportDTO) -> VectorizedReportEntity:
     exist_report = self.report_crud_operator.get_reports(query)
     
     if not exist_report:
@@ -49,7 +51,7 @@ class BugReportUsecase:
     return vectorized_report
   
   
-  def delete_report(self, query: GetReportQueryDTO):
+  def delete_report(self, query: GetReportQueryDTO) -> VectorizedReportEntity:
     exist_report = self.report_crud_operator.get_reports(query)
     
     if not exist_report:

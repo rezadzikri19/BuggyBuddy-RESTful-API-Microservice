@@ -2,3 +2,4 @@ nltk
 tensorflow
 pinecone-client
 sentence_transformers
+fastapi
