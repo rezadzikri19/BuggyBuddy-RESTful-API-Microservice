@@ -2,6 +2,7 @@ from typing import Dict, Any
 
 import re
 import nltk
+import uuid
 
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
@@ -45,11 +46,12 @@ def pinecone_response_to_report(response: QueryResponse) -> VectorizedReportEnti
   
 
 def report_to_pinecone_vector(report: VectorizedReportEntity) -> Dict[str, Any]:
+  report_id = str(uuid.uuid4()) if 'id' not in report else report['id']
   return {
-      'id': report['id'],
+      'id': report_id,
       'values': report['vector'],
       'metadata': {
-        'id': report['id'],
+        'id': report_id,
         'summary': report['summary'],
         'description': report['description'],
         'platform': report['platform'],

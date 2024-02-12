@@ -30,8 +30,7 @@ class ReportPreprocessorDriver(ReportPreprocessorPort):
   def aggregate_text_features(self, data: DropFeaturesDTO) -> str:
     try:
       text = data['platform'] + data['summary'] + data['description']
-      result = {'text': text}
-      return result
+      return text
     except Exception as error:
       error_message = f'ReportPreprocessorDriver.aggregate_text_features: {error}'
       self.logger.log_error(error_message, error)

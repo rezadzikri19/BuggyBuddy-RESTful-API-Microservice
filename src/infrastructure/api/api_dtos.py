@@ -38,4 +38,4 @@ class ResponseGetReportDTO(BaseModel):
   product: str
   component: str
   type: str
-  vector: List[float]
+  vector: Optional[List[float]] = None

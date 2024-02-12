@@ -1,7 +1,7 @@
-from typing import List, TypedDict
+from typing import List, TypedDict, Optional
 
 class RawReportEntity(TypedDict):
-  id: int
+  id: Optional[int] = None
   summary: str
   description: str
   platform: str
@@ -11,7 +11,7 @@ class RawReportEntity(TypedDict):
     
     
 class VectorizedReportEntity(TypedDict):
-  id: int
+  id: Optional[int] = None
   summary: str
   description: str
   platform: str

@@ -31,7 +31,7 @@ class ReportCRUDUsecase:
   def get_similar_reports(self, report: ReportDTO) -> List[VectorizedReportEntity]:
     try:
       vector = self.report_vectorize_usecase.report_vectorize(report)
-      vectorized_report = {**report, vector: vector}
+      vectorized_report = {**report, 'vector': vector}
       
       result = self.report_crud_operator.get_similar_reports(vectorized_report)
       result = result if result else []
@@ -43,10 +43,10 @@ class ReportCRUDUsecase:
   def create_new_report(self, report: ReportDTO) -> VectorizedReportEntity:
     try:
       vector = self.report_vectorize_usecase.report_vectorize(report)
-      vectorized_report = {**report, vector: vector}
+      vectorized_report = {**report, 'vector': vector}
       
-      self.report_crud_operator.create_report(vectorized_report)
-      return report
+      result = self.report_crud_operator.create_report(vectorized_report)
+      return result
     except Exception as error:
       error_message = f'ReportCRUDUsecase.create_new_report: {error}'
       self.logger.log_error(error_message, error)
@@ -60,7 +60,7 @@ class ReportCRUDUsecase:
         raise Exception('report not found!')
       
       vector = self.report_vectorize_usecase.report_vectorize(exist_report[0])
-      vectorized_report = {**exist_report[0], **report, vector: vector}
+      vectorized_report = {**exist_report[0], **report, 'vector': vector}
       
       self.report_crud_operator.update_report(query['id'], vectorized_report)
       return vectorized_report

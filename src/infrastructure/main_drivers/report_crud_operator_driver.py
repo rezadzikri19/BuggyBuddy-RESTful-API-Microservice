@@ -21,9 +21,9 @@ class ReportCRUDOperatorDriver(ReportCRUDOperatorPort):
     
   def create_report(self, report: VectorizedReportEntity) -> VectorizedReportEntity:
     try:
-      inserted_vectors = [report_to_pinecone_vector(report)]
-      self.pinecone_index.upsert(vectors=inserted_vectors)
-      return report
+      pinecone_vector = report_to_pinecone_vector(report)
+      self.pinecone_index.upsert(vectors=[pinecone_vector])
+      return pinecone_vector['metadata']
     except Exception as error:
       error_message = f'ReportCRUDOperatorDriver.create_report: {error}'
       self.logger.log_error(error_message, error)
