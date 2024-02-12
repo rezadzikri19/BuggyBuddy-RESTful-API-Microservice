@@ -66,10 +66,10 @@ class ReportCRUDOperatorDriver(ReportCRUDOperatorPort):
       pinecone_vector = report_to_pinecone_vector(report)
       self.pinecone_index.update(
           id=report_id,
-          values=report['vector'],
+          # values=report['vector'],
           set_metadata=pinecone_vector['metadata'],
         )
-      return report
+      return pinecone_vector['metadata']
     except Exception as error:
       error_message = f'ReportCRUDOperatorDriver.update_report: {error}'
       self.logger.log_error(error_message, error)
