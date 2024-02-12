@@ -14,23 +14,8 @@ def api_routers(router: APIRouter, report_crud_usecase: ReportCRUDUsecase) -> AP
     return result
   
   @router.get('/reports')
-  async def get_reports(
-      id: Optional[str] = None,
-      summary: Optional[str] = None,
-      description: Optional[str] = None,
-      platform: Optional[str] = None,
-      product: Optional[str] = None,
-      component: Optional[str] = None,
-      type: Optional[str] = None) -> List[ResponseGetReportDTO]:
-    query: GetReportQueryDTO = {
-      'id': id,
-      'component': component,
-      'description': description,
-      'platform': platform,
-      'product': product,
-      'summary': summary,
-      'type': type
-    }
+  async def get_reports(query: RequestGetReportQueryDTO) -> List[ResponseGetReportDTO]:
+    query = query.model_dump(exclude_none=True)
     result = report_crud_usecase.get_reports(query)
     return result
   

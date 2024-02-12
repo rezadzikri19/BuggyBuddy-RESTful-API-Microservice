@@ -35,7 +35,7 @@ class ReportCRUDOperatorDriver(ReportCRUDOperatorPort):
       response = self.pinecone_index.query(
           vector=[0 for _ in range(128)],
           filter=query,
-          top_k=5,
+          top_k=1000,
           include_metadata=True,
           include_values=True
         )
