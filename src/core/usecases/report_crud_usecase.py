@@ -77,7 +77,7 @@ class ReportCRUDUsecase:
         raise Exception('report not found!')
       
       self.report_crud_operator.delete_report(query['id'])
-      return exist_report
+      return exist_report[0]
     except Exception as error:
       error_message = f'ReportCRUDUsecase.delete_report: {error}'
       self.logger.log_error(error_message, error)

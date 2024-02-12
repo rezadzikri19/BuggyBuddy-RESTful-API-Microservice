@@ -4,7 +4,7 @@ from ...core.usecases.report_crud_usecase import ReportCRUDUsecase
 from ...core.dtos.report_crud_dto import GetReportQueryDTO
 from ...infrastructure.api.api_dtos import *
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 def api_routers(router: APIRouter, report_crud_usecase: ReportCRUDUsecase) -> APIRouter:
   @router.post('/reports')
@@ -48,8 +48,10 @@ def api_routers(router: APIRouter, report_crud_usecase: ReportCRUDUsecase) -> AP
   
   @router.delete('/reports/{report_id}')
   async def update_report(report_id: str) -> ResponseGetReportDTO:
-    result = report_crud_usecase.delete_report({ 'id': report_id })
-    return result
-  
+    try:
+      result = report_crud_usecase.delete_report({ 'id': report_id })
+      return result
+    except Exception as error:
+      raise HTTPException(status_code=500, detail=error)
   return router
   

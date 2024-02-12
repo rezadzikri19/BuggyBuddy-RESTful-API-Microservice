@@ -26,7 +26,7 @@ class RevectorizerDriver(RevectorizerPort):
       
       revectorizer_model: Model = load_model(data_path)
       revector = revectorizer_model.predict([vector])
-      return list(revector[0])
+      return revector[0].tolist()
     except Exception as error:
       error_message = f'RevectorizerDriver.revectorize: {error}'
       self.logger.log_error(error_message, error)
