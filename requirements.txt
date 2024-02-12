@@ -1,5 +1,6 @@
 nltk
-tensorflow
+tensorflow==2.14.0
 pinecone-client
 sentence_transformers
 fastapi
+uvicorn[standard]

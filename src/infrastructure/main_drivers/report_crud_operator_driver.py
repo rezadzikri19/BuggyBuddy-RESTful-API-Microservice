@@ -6,7 +6,7 @@ from ...core.entities.report_entity import VectorizedReportEntity
 from ...core.ports.report_crud_operator_port import ReportCRUDOperatorPort
 from ...core.ports.logger_port import LoggerPort
 
-from ...infrastructure.utils.common_util import report_to_pinecone_vector, pinecone_response_to_report
+from ...infrastructure.utils.common_util import report_to_pinecone_vector, pinecone_response_to_report, remove_non_null_values
 
 from pinecone import Index
 
@@ -31,6 +31,7 @@ class ReportCRUDOperatorDriver(ReportCRUDOperatorPort):
   
   def get_reports(self, query: GetReportQueryDTO) -> List[VectorizedReportEntity]:
     try:
+      query = remove_non_null_values(query)
       response = self.pinecone_index.query(
           vector=[0 for _ in range(128)],
           filter=query,

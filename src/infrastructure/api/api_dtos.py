@@ -11,7 +11,9 @@ class RequestReportDTO(BaseModel):
 
 
 class RequestGetReportQueryDTO(BaseModel):
-  id: Optional[int] = None
+  id: Optional[str] = None
+  summary: Optional[str] = None
+  description: Optional[str] = None
   platform: Optional[str] = None
   product: Optional[str] = None
   component: Optional[str] = None
@@ -19,7 +21,7 @@ class RequestGetReportQueryDTO(BaseModel):
 
 
 class RequestUpdateReportDTO(BaseModel):
-  id: Optional[int] = None
+  id: Optional[str] = None
   summary: Optional[str] = None
   description: Optional[str] = None
   platform: Optional[str] = None
@@ -29,7 +31,7 @@ class RequestUpdateReportDTO(BaseModel):
   
 
 class ResponseGetReportDTO(BaseModel):
-  id: int
+  id: str
   summary: str
   description: str
   platform: str

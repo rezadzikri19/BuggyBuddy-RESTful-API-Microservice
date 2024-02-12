@@ -14,7 +14,7 @@ class RevectorizerDriver(RevectorizerPort):
   def revectorize(self, vector: List[float]) -> List[float]:
     try:
       curr_dir = os.getcwd()
-      data_dir = os.path.join(curr_dir, 'artifacts', 'model')
+      data_dir = os.path.join(curr_dir, 'artifacts', 'models')
       
       if not os.path.exists(data_dir):
           os.makedirs(data_dir)

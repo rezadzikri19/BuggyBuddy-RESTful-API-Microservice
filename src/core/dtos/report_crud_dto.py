@@ -9,17 +9,19 @@ class ReportDTO(TypedDict):
   type: str
 
 class GetReportQueryDTO(TypedDict):
-  id: Optional[int]
-  platform: Optional[str]
-  product: Optional[str]
-  component: Optional[str]
-  type: Optional[str]
+  id: Optional[str] = None
+  summary: Optional[str] = None
+  description: Optional[str] = None
+  platform: Optional[str] = None
+  product: Optional[str] = None
+  component: Optional[str] = None
+  type: Optional[str] = None
 
 
 class UpdateReportDTO(TypedDict):
-  summary: Optional[str]
-  description: Optional[str]
-  platform: Optional[str]
-  product: Optional[str]
-  component: Optional[str]
-  type: Optional[str]
+  summary: Optional[str]  = None
+  description: Optional[str]  = None
+  platform: Optional[str]  = None
+  product: Optional[str]  = None
+  component: Optional[str]  = None
+  type: Optional[str]  = None

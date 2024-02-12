@@ -13,9 +13,6 @@ from ...core.entities.report_entity import RawReportEntity
 from ...core.ports.report_preprocessor_port import ReportPreprocessorPort
 from ...core.ports.logger_port import LoggerPort
 
-nltk.download('stopwords')
-nltk.download('punkt')
-
 class ReportPreprocessorDriver(ReportPreprocessorPort):
   def __init__(self, logger: LoggerPort) -> None:
     self.logger = logger

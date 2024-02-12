@@ -7,22 +7,23 @@ from src.infrastructure.main_drivers.revectorizer_driver import RevectorizerDriv
 
 from src.infrastructure.logger.logger_driver import LoggerDriver
 
-from src.infrastructure.api.routes import ApiRoutes
+from src.infrastructure.api.routes import api_routers
 
 from pinecone import Pinecone
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 
-def main():
-  logger_driver = LoggerDriver()
-  
+app = FastAPI(swagger_ui_parameters={"syntaxHighlight.theme": "obsidian"})
+router = APIRouter()
+logger_driver = LoggerDriver()
+
+def crud_usecase_builder():
   try:
-    app = FastAPI()
-    pc = Pinecone(api_key="d5532e31-0f59-48ce-a12a-743f75e16b5f")
+    pc = Pinecone(api_key='d5532e31-0f59-48ce-a12a-743f75e16b5f')
     pc_index = pc.Index('bug-report-index')
     
     report_preprocessor_driver = ReportPreprocessorDriver(logger_driver)
     revectorizer_driver = RevectorizerDriver(logger_driver)
-    report_crud_operator_driver = ReportCRUDOperatorDriver(logger_driver, pinecone_index=pc_index)
+    report_crud_operator_driver = ReportCRUDOperatorDriver(pc_index, logger_driver)
     
     report_vectorize_usecase = ReportVectorizeUsecase(
       report_preprocessor=report_preprocessor_driver,
@@ -33,13 +34,13 @@ def main():
       report_vectorize_usecase=report_vectorize_usecase,
       logger=logger_driver)
     
-    api_routes = ApiRoutes(report_crud_usecase)
-    app.include_router(api_routes)
+    return report_crud_usecase
   except Exception as error:
-    error_message = f'main: {error}'
+    error_message = f'main:crud_usecase_builder: {error}'
     logger_driver.log_error(error_message, error)
 
-if __name__ == "__main__":
-  main()
+report_crud_usecase = crud_usecase_builder()
+api_routes = api_routers(router, report_crud_usecase)
+app.include_router(api_routes)
   
 

@@ -5,12 +5,12 @@ import nltk
 
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
-from pinecone import QueryResponse, Vector
+from pinecone import QueryResponse
 
 from ...core.entities.report_entity import VectorizedReportEntity
 
-nltk.download('stopwords')
-nltk.download('punkt')
+nltk.download('stopwords', quiet=True)
+nltk.download('punkt', quiet=True)
 
 def remove_special_chars(text: str):
   text = text.lower()
@@ -33,7 +33,7 @@ def remove_stops(text: str):
 
 def pinecone_response_to_report(response: QueryResponse) -> VectorizedReportEntity:
   return VectorizedReportEntity(
-    id=response['id'],
+    id=response['metadata']['id'],
     component=response['metadata']['component'],
     description=response['metadata']['description'],
     platform=response['metadata']['platform'],
@@ -58,3 +58,8 @@ def report_to_pinecone_vector(report: VectorizedReportEntity) -> Dict[str, Any]:
         'type': report['type']
       }
     }
+  
+  
+def remove_non_null_values(obj: object):
+  result = {key: value for key, value in obj.items() if value is not None}
+  return result
