@@ -6,7 +6,7 @@ from keras.models import Model, load_model
 from ...core.ports.revectorizer_port import RevectorizerPort
 from ...core.ports.logger_port import LoggerPort
 
-class RevectorizerDriver(RevectorizerPort):
+class LocalRevectorizerDriver(RevectorizerPort):
   def __init__(self, logger: LoggerPort) -> None:
     self.logger = logger
 
@@ -28,5 +28,5 @@ class RevectorizerDriver(RevectorizerPort):
       revector = revectorizer_model.predict([vector])
       return revector[0].tolist()
     except Exception as error:
-      error_message = f'RevectorizerDriver.revectorize: {error}'
+      error_message = f'LocalRevectorizerDriver.revectorize: {error}'
       self.logger.log_error(error_message, error)

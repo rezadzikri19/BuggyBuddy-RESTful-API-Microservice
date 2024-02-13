@@ -1,8 +1,7 @@
 from typing import List
 
 from ...core.usecases.report_crud_usecase import ReportCRUDUsecase
-from ...core.dtos.report_crud_dto import GetReportQueryDTO
-from ...infrastructure.api.api_dtos import *
+from ...infrastructure.api.api_dtos import RequestReportDTO, ResponseGetReportDTO, RequestGetReportQueryDTO, RequestUpdateReportDTO
 
 from fastapi import APIRouter, HTTPException
 
@@ -38,5 +37,6 @@ def api_routers(router: APIRouter, report_crud_usecase: ReportCRUDUsecase) -> AP
       return result
     except Exception as error:
       raise HTTPException(status_code=500, detail=error)
+
   return router
   

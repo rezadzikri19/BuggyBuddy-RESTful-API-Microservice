@@ -4,3 +4,5 @@ pinecone-client
 sentence_transformers
 fastapi
 uvicorn[standard]
+boto3
+python-dotenv
