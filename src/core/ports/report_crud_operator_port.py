@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import List, Optional
 
 from ...core.entities.report_entity import VectorizedReportEntity
-from ...core.dtos.report_crud_dto import GetReportQueryDTO, UpdateReportDTO
+from ...core.dtos.report_crud_dto import GetReportQueryDTO
 
 class ReportCRUDOperatorPort(ABC):
   @abstractmethod

@@ -1,35 +1,11 @@
 from typing import Dict, Any
 
 import re
-import nltk
 import uuid
 
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
 from pinecone import QueryResponse
 
 from ...core.entities.report_entity import VectorizedReportEntity
-
-nltk.download('stopwords', quiet=True)
-nltk.download('punkt', quiet=True)
-
-def remove_special_chars(text: str):
-  text = text.lower()
-  text = re.sub(r'\n|\t|\r|\0', ' ', text)
-  text = re.sub(r'[^a-zA-Z0-9\s]', ' ', text)
-  text = re.sub(r'\s{2,}', ' ', text)
-  text = re.sub(r'\s$', '', text)
-  text = re.sub(r'\s[b-z]\s', ' ', text)
-  text = re.sub(r'\s[b-z]\s', ' ', text)
-  text = re.sub(r'\s{2,}', ' ', text)
-  return text
-
-
-def remove_stops(text: str):
-  stop_words = set(stopwords.words('english'))
-  words = word_tokenize(text)
-  filtered_words = [word for word in words if word not in stop_words]
-  return ' '.join(filtered_words)
 
 
 def pinecone_response_to_report(response: QueryResponse) -> VectorizedReportEntity:
