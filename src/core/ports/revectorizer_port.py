@@ -3,5 +3,5 @@ from typing import List
 
 class RevectorizerPort(ABC):
   @abstractmethod
-  def revectorize(vector: List[float]) -> List[float]:
+  def revectorize(self, vector: List[float]) -> List[float]:
     pass

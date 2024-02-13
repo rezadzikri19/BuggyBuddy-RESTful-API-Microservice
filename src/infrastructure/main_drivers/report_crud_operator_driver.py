@@ -1,3 +1,4 @@
+from pinecone import Index
 from typing import List, Optional
 
 from ...core.dtos.report_crud_dto import GetReportQueryDTO
@@ -7,8 +8,6 @@ from ...core.ports.report_crud_operator_port import ReportCRUDOperatorPort
 from ...core.ports.logger_port import LoggerPort
 
 from ...infrastructure.utils.common_util import report_to_pinecone_vector, pinecone_response_to_report, remove_non_null_values
-
-from pinecone import Index
 
 class ReportCRUDOperatorDriver(ReportCRUDOperatorPort):
   def __init__(
