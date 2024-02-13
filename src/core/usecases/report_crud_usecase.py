@@ -40,6 +40,7 @@ class ReportCRUDUsecase:
       error_message = f'ReportCRUDUsecase.get_similar_reports: {error}'
       self.logger.log_error(error_message, error)
   
+  
   def create_new_report(self, report: ReportDTO) -> VectorizedReportEntity:
     try:
       vector = self.report_vectorize_usecase.report_vectorize(report)

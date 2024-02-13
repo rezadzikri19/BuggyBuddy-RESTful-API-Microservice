@@ -21,15 +21,17 @@ AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 REGION_NAME = os.getenv('REGION_NAME')
 BUCKET_NAME = os.getenv('BUCKET_NAME')
+PINECONE_API_KEY = os.getenv('PINECONE_API_KEY')
+PINECONE_INDEX = os.getenv('PINECONE_INDEX')
 
-app = FastAPI(swagger_ui_parameters={"syntaxHighlight.theme": "obsidian"})
-router = APIRouter()
+app = FastAPI(swagger_ui_parameters={'syntaxHighlight.theme': 'obsidian'})
+router = APIRouter(prefix='/api')
 logger_driver = LoggerDriver()
 
 def crud_usecase_builder():
   try:
-    pc = Pinecone(api_key='d5532e31-0f59-48ce-a12a-743f75e16b5f')
-    pc_index = pc.Index('bug-report-index')
+    pc = Pinecone(api_key=PINECONE_API_KEY)
+    pc_index = pc.Index(PINECONE_INDEX)
     
     report_preprocessor_driver = ReportPreprocessorDriver(logger_driver)
     # revectorizer_driver = LocalRevectorizerDriver(logger_driver)

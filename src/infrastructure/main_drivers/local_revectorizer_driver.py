@@ -21,7 +21,7 @@ class LocalRevectorizerDriver(RevectorizerPort):
           
           raise Exception('directory not found!')
         
-      file_name = 'revectorizer.bin'
+      file_name = 'model_embedding.h5'
       data_path = os.path.join(data_dir, file_name)
       
       revectorizer_model: Model = load_model(data_path)

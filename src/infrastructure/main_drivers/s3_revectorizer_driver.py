@@ -1,5 +1,5 @@
+import os
 from typing import List
-from io import BytesIO
 
 import boto3
 from keras.models import Model, load_model
@@ -16,10 +16,10 @@ class S3RevectorizerDriver(RevectorizerPort):
       bucket_name: str,
       logger: LoggerPort) -> None:
     session = boto3.Session(
-      aws_access_key_id=aws_access_key_id,
-      aws_secret_access_key=aws_secret_access_key,
-      region_name=region_name
-    )
+        aws_access_key_id=aws_access_key_id,
+        aws_secret_access_key=aws_secret_access_key,
+        region_name=region_name
+      )
     self.s3_client = session.client('s3')
     self.bucket_name = bucket_name
     self.logger = logger
@@ -27,13 +27,23 @@ class S3RevectorizerDriver(RevectorizerPort):
   
   def revectorize(self, vector: List[float]) -> List[float]:
     try:
-      file_name = '/TRAIN/models/embedding/model_embedding.bin'
-
-      response = self.s3_client.get_object(Bucket=self.bucket_name, Key=file_name)
-      model_data = response['Body'].read()
-          
-      revectorizer_model: Model = load_model(BytesIO(model_data))
+      file_name = 'model_embedding.h5'
+      s3_model_path = f'TRAIN/models/embedding/{file_name}'
+      
+      curr_dir = os.getcwd()
+      data_dir = os.path.join(curr_dir, 'artifacts', 'models')
+      
+      if not os.path.exists(data_dir):
+          os.makedirs(data_dir)
+        
+      model_path = os.path.join(data_dir, file_name)
+      
+      if not os.path.exists(model_path):
+        self.s3_client.download_file(self.bucket_name, s3_model_path, model_path)
+      
+      revectorizer_model: Model = load_model(model_path)
       revector = revectorizer_model.predict([vector])
+      
       return revector[0].tolist()
     except Exception as error:
       error_message = f'S3RevectorizerDriver.revectorize: {error}'
