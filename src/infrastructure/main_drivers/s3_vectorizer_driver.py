@@ -4,10 +4,10 @@ from typing import List
 import boto3
 from keras.models import Model, load_model
 
-from ...core.ports.revectorizer_port import RevectorizerPort
+from ...core.ports.vectorizer_port import VectorizerPort
 from ...core.ports.logger_port import LoggerPort
 
-class S3RevectorizerDriver(RevectorizerPort):
+class S3VectorizerDriver(VectorizerPort):
   def __init__(
       self,
       aws_access_key_id: str,
@@ -24,7 +24,7 @@ class S3RevectorizerDriver(RevectorizerPort):
     self.logger = logger
 
   
-  def revectorize(self, vector: List[float]) -> List[float]:
+  def vectorize(self, vector: List[float]) -> List[float]:
     try:
       file_name = 'model_embedding.h5'
       s3_model_path = f'TRAIN/models/embedding/{file_name}'
@@ -40,10 +40,10 @@ class S3RevectorizerDriver(RevectorizerPort):
       if not os.path.exists(model_path):
         self.s3_client.download_file(self.bucket_name, s3_model_path, model_path)
       
-      revectorizer_model: Model = load_model(model_path)
-      revector = revectorizer_model.predict([vector])
+      vectorizer_model: Model = load_model(model_path)
+      revector = vectorizer_model.predict([vector])
       
       return revector[0].tolist()
     except Exception as error:
-      error_message = f'S3RevectorizerDriver.revectorize: {error}'
+      error_message = f'S3VectorizerDriver.vectorize: {error}'
       self.logger.log_error(error_message, error)

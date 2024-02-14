@@ -8,8 +8,8 @@ from src.core.usecases.report_vectorize_usecase import ReportVectorizeUsecase
 
 from src.infrastructure.main_drivers.report_crud_operator_driver import ReportCRUDOperatorDriver
 from src.infrastructure.main_drivers.report_preprocessor_driver import ReportPreprocessorDriver
-from src.infrastructure.main_drivers.local_revectorizer_driver import LocalRevectorizerDriver
-from src.infrastructure.main_drivers.s3_revectorizer_driver import S3RevectorizerDriver
+from src.infrastructure.main_drivers.local_vectorizer_driver import LocalVectorizerDriver
+from src.infrastructure.main_drivers.s3_vectorizer_driver import S3VectorizerDriver
 
 from src.infrastructure.logger.logger_driver import LoggerDriver
 
@@ -34,8 +34,8 @@ def crud_usecase_builder():
     pc_index = pc.Index(PINECONE_INDEX)
     
     report_preprocessor_driver = ReportPreprocessorDriver(logger_driver)
-    # revectorizer_driver = LocalRevectorizerDriver(logger_driver)
-    revectorizer_driver = S3RevectorizerDriver(
+    # vectorizer_driver = LocalVectorizerDriver(logger_driver)
+    vectorizer_driver = S3VectorizerDriver(
         aws_access_key_id=AWS_ACCESS_KEY_ID,
         aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
         region_name=REGION_NAME,
@@ -46,7 +46,7 @@ def crud_usecase_builder():
     
     report_vectorize_usecase = ReportVectorizeUsecase(
       report_preprocessor=report_preprocessor_driver,
-      revectorizer=revectorizer_driver,
+      vectorizer=vectorizer_driver,
       logger=logger_driver)
     report_crud_usecase = ReportCRUDUsecase(
       report_crud_operator=report_crud_operator_driver,
