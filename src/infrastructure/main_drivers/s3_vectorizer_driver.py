@@ -2,12 +2,14 @@ import os
 from typing import List
 
 import boto3
-from keras.models import Model, load_model
+from keras.models import load_model
 
 from ...core.ports.vectorizer_port import VectorizerPort
 from ...core.ports.logger_port import LoggerPort
 
 class S3VectorizerDriver(VectorizerPort):
+  _vectorizer_model = None
+  
   def __init__(
       self,
       aws_access_key_id: str,
@@ -22,28 +24,32 @@ class S3VectorizerDriver(VectorizerPort):
     self.s3_client = session.client('s3')
     self.bucket_name = bucket_name
     self.logger = logger
+    self.initiate_model()
 
-  
-  def vectorize(self, vector: List[float]) -> List[float]:
+
+  def initiate_model(self) -> None:
     try:
       file_name = 'model_embedding.h5'
       s3_model_path = f'TRAIN/models/embedding/{file_name}'
       
-      curr_dir = os.getcwd()
-      data_dir = os.path.join(curr_dir, 'artifacts', 'models')
-      
-      if not os.path.exists(data_dir):
-          os.makedirs(data_dir)
-        
+      data_dir = os.path.join(os.getcwd(), 'artifacts', 'models')
+      os.makedirs(data_dir, exist_ok=True)
       model_path = os.path.join(data_dir, file_name)
       
-      if not os.path.exists(model_path):
-        self.s3_client.download_file(self.bucket_name, s3_model_path, model_path)
+      self.s3_client.download_file(self.bucket_name, s3_model_path, model_path)
+      S3VectorizerDriver._vectorizer_model = load_model(model_path)
+    except Exception as error:
+      error_message = f'S3VectorizerDriver.initiate_model: {error}'
+      self.logger.log_error(error_message, error)
+  
+  
+  def vectorize(self, vector: List[float]) -> List[float]:
+    try:
+      if S3VectorizerDriver._vectorizer_model is None:
+        raise Exception('vectorizer model not found!')
       
-      vectorizer_model: Model = load_model(model_path)
-      revector = vectorizer_model.predict([vector])
-      
-      return revector[0].tolist()
+      vectorized = S3VectorizerDriver._vectorizer_model.predict([vector])
+      return vectorized[0].tolist()
     except Exception as error:
       error_message = f'S3VectorizerDriver.vectorize: {error}'
       self.logger.log_error(error_message, error)

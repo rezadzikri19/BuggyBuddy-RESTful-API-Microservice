@@ -24,15 +24,11 @@ BUCKET_NAME = os.getenv('BUCKET_NAME')
 PINECONE_API_KEY = os.getenv('PINECONE_API_KEY')
 PINECONE_INDEX = os.getenv('PINECONE_INDEX')
 
-app = FastAPI(swagger_ui_parameters={'syntaxHighlight.theme': 'obsidian'})
-router = APIRouter(prefix='/api')
+pc_index = Pinecone(api_key=PINECONE_API_KEY).Index(PINECONE_INDEX)
 logger_driver = LoggerDriver()
 
 def crud_usecase_builder():
   try:
-    pc = Pinecone(api_key=PINECONE_API_KEY)
-    pc_index = pc.Index(PINECONE_INDEX)
-    
     report_preprocessor_driver = ReportPreprocessorDriver(logger_driver)
     # vectorizer_driver = LocalVectorizerDriver(logger_driver)
     vectorizer_driver = S3VectorizerDriver(
@@ -58,8 +54,13 @@ def crud_usecase_builder():
     error_message = f'main:crud_usecase_builder: {error}'
     logger_driver.log_error(error_message, error)
 
+
+app = FastAPI(swagger_ui_parameters={'syntaxHighlight.theme': 'obsidian'})
+router = APIRouter(prefix='/api')
+
 report_crud_usecase = crud_usecase_builder()
 api_routes = api_routers(router, report_crud_usecase)
+
 app.include_router(api_routes)
   
 
