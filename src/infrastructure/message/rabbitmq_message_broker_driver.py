@@ -7,8 +7,6 @@ from typing import Callable, Dict, Any
 from ...core.ports.message_broker_port import MessageBrokerPort
 
 class RabbitMQMessageBrokerDriver(MessageBrokerPort):
-  _connection = None
-
   def __init__(
       self,
       host: str,
@@ -19,19 +17,15 @@ class RabbitMQMessageBrokerDriver(MessageBrokerPort):
     self.port = port
     self.username = username
     self.password = password
-    self.connection = None
-
-    if not RabbitMQMessageBrokerDriver._connection:
-      credentials = pika.PlainCredentials(username=username, password=password)
-      connection_params = pika.ConnectionParameters(host=host, port=port, credentials=credentials)
-      RabbitMQMessageBrokerDriver._connection = pika.BlockingConnection(connection_params)
-      
-    self.connection = RabbitMQMessageBrokerDriver._connection
   
   
   def subscribe_topic(self, exchange: str, route: str, callback: Callable[[bytes], None]) -> None:
     def consume_messages():
-      channel = self.connection.channel()
+      credentials = pika.PlainCredentials(username=self.username, password=self.password)
+      connection_params = pika.ConnectionParameters(host=self.host, port=self.port, credentials=credentials, heartbeat=1000)
+      connection = pika.BlockingConnection(connection_params)
+      
+      channel = connection.channel()
       channel.exchange_declare(exchange=exchange, exchange_type='direct')
       
       result = channel.queue_declare(queue='', exclusive=True)
@@ -49,14 +43,13 @@ class RabbitMQMessageBrokerDriver(MessageBrokerPort):
 
   
   def publish_message(self, exchange: str, route: str, data: Dict[str, Any]) -> None:
+    credentials = pika.PlainCredentials(username=self.username, password=self.password)
+    connection_params = pika.ConnectionParameters(host=self.host, port=self.port, credentials=credentials, heartbeat=1000)
+    connection = pika.BlockingConnection(connection_params)
+    
     message_body = json.dumps(data)
-    channel = self.connection.channel()
+    channel = connection.channel()
     
     channel.exchange_declare(exchange=exchange, exchange_type='direct')
     channel.basic_publish(exchange=exchange, routing_key=route, body=message_body)
-    
-    
-  def close(self) -> None:
-    if self.connection:
-      self.connection.close()
-      RabbitMQMessageBrokerDriver._connection = None
+    connection.close()
