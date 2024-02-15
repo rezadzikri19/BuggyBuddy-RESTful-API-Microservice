@@ -9,14 +9,18 @@ from ...core.ports.logger_port import LoggerPort
 class LocalVectorizerDriver(VectorizerPort):
   _vectorizer_model = None
   
-  def __init__(self, logger: LoggerPort) -> None:
+  def __init__(
+      self,
+      data_dir_path: str,
+      logger: LoggerPort) -> None:
+    self.data_dir_path = data_dir_path
     self.logger = logger
     self.initiate_model()
 
 
   def initiate_model(self) -> None:
     try:
-      data_dir = os.path.join(os.getcwd(), 'artifacts', 'models')
+      data_dir = os.path.join(self.data_dir_path, 'models')
       os.makedirs(data_dir, exist_ok=True)
       
       file_name = 'model_embedding.h5'

@@ -18,6 +18,8 @@ from src.infrastructure.api.routes import api_routers
 
 load_dotenv()
 
+LOCAL_DATA_DIR_PATH = os.getenv('LOCAL_DATA_DIR_PATH')
+
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 REGION_NAME = os.getenv('REGION_NAME')
@@ -42,7 +44,9 @@ logger_driver = LoggerDriver()
 def crud_usecase_builder():
   try:
     report_preprocessor_driver = ReportPreprocessorDriver(logger_driver)
-    # vectorizer_driver = LocalVectorizerDriver(logger_driver)
+    # vectorizer_driver = LocalVectorizerDriver(
+    #   data_dir_path=LOCAL_DATA_DIR_PATH,
+    #   logger=logger_driver)
     vectorizer_driver = S3VectorizerDriver(
         aws_access_key_id=AWS_ACCESS_KEY_ID,
         aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
