@@ -9,12 +9,23 @@ from ...core.ports.message_broker_port import MessageBrokerPort
 class RabbitMQMessageBrokerDriver(MessageBrokerPort):
   _connection = None
 
-  def __init__(self, host: str) -> None:
+  def __init__(
+      self,
+      host: str,
+      port: str,
+      username: str,
+      password: str) -> None:
     self.host = host
+    self.port = port
+    self.username = username
+    self.password = password
     self.connection = None
 
     if not RabbitMQMessageBrokerDriver._connection:
-      RabbitMQMessageBrokerDriver._connection = pika.BlockingConnection(pika.ConnectionParameters(host=host))
+      credentials = pika.PlainCredentials(username=username, password=password)
+      connection_params = pika.ConnectionParameters(host=host, port=port, credentials=credentials)
+      RabbitMQMessageBrokerDriver._connection = pika.BlockingConnection(connection_params)
+      
     self.connection = RabbitMQMessageBrokerDriver._connection
   
   

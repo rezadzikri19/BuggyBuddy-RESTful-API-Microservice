@@ -22,12 +22,21 @@ AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 REGION_NAME = os.getenv('REGION_NAME')
 BUCKET_NAME = os.getenv('BUCKET_NAME')
+
 PINECONE_API_KEY = os.getenv('PINECONE_API_KEY')
 PINECONE_INDEX = os.getenv('PINECONE_INDEX')
+
 RABBITMQ_HOST = os.getenv('RABBITMQ_HOST')
+RABBITMQ_PORT = os.getenv('RABBITMQ_PORT')
+RABBITMQ_USERNAME = os.getenv('RABBITMQ_USERNAME')
+RABBITMQ_PASSWORD = os.getenv('RABBITMQ_PASSWORD')
 
 pc_index = Pinecone(api_key=PINECONE_API_KEY).Index(PINECONE_INDEX)
-message_broker_driver = RabbitMQMessageBrokerDriver(host=RABBITMQ_HOST)
+message_broker_driver = RabbitMQMessageBrokerDriver(
+  host=RABBITMQ_HOST,
+  port=RABBITMQ_PORT,
+  username=RABBITMQ_USERNAME,
+  password=RABBITMQ_PASSWORD)
 logger_driver = LoggerDriver()
 
 def crud_usecase_builder():
