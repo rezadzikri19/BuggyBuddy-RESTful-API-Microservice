@@ -1,35 +1,36 @@
-# **REST API Microservice [BuggyBuddy🐞]**
+# **🧭 BuggyBuddy REST API [Microservice]**
 
 ## Overview
 
-The **REST API Microservice [BuggyBuddy🐞]** plays a crucial role in the [BuggyBuddy](http://example.com) project, functioning as a RESTful API application designed to seamlessly integrate with various types of projects. Developed using FastAPI and seamlessly integrated with Swagger documentation, it provides a powerful and user-friendly interface for building and interacting with REST APIs.
+The **BuggyBuddy REST API Microservice** plays a crucial role in the [BuggyBuddy](http://example.com) project, functioning as a RESTful API application designed to seamlessly integrate with various types of projects. Developed using FastAPI and integrated with Swagger documentation, it provides a powerful and user-friendly interface for building and interacting with REST APIs.
 
 ## Features
 
-- **RESTful API**:
-  - Provides a comprehensive REST API interface for interacting with the BuggyBuddy system.
 - **Integration with Pinecone Vector Database**:
-  - Employs Pinecone for similarity searches on bug reports, aiding users in finding resolutions faster by suggesting similar resolved reports.
+  - Menggunakan Pinecone vector database, allowing for fast and scalable application.
 - **Built with FastAPI**:
   - Developed using FastAPI, a modern, high-performance web framework for building asynchronous Rest APIs with Python.
+- **Swagger Documentation**:
+  - built-in Swagger documentation, simplifying interfacing with other applications.
+
 
 ## Folder Structure
-Utilizing clean architecture principles, this microservice offers seamless integration with different tech stacks. Simply switch drivers/implementation in the infrastructure for effortless adaptability.
+Utilizing clean architecture principles, this microservice provides effortless integration with various technology stacks. You can easily switch drivers or implementations within the infrastructure, ensuring smooth adaptability.
 
 ```
 my_project/
 ├── src/
 │   └── core/
-│       ├── dtos/         <- Data Transfer Objects (DTOs) for report CRUD operations and preprocessing.
-│       ├── entities/     <- Entities representing report data.
-│       ├── ports/        <- Ports defining contracts for message brokers, report CRUD operations, preprocessors, and vectorizers.
-│       └── usecases/     <- Use cases for report CRUD operations and vectorization.
+│       ├── dtos/         <- DTOs for transferring data between pipelines/modules.
+│       ├── entities/     <- Domain entities representing data objects.
+│       ├── ports/        <- Ports defining contracts for drivers.
+│       └── usecases/     <- Use cases implementing business logic.
 └── infrastructure/
-    ├── api/              <- API routes (FastAPI), API DTOs (Pydantic).
-    ├── main_drivers/     <- Main drivers for report CRUD operations (Pinecone), report preprocessing (Pandas, NumPy, and Sentence Transformers), and report vectorization (Keras and S3 with Boto3).
-    ├── loggers/          <- Logger driver for capturing application logs.
-    ├── message/          <- Message broker implementation (RabbitMQ with Pika).
-    └── utils/            <- Common utility functions and helpers.
+    ├── api/              <- API routes and DTOs.
+    ├── main_drivers/     <- Data and CRUD drivers.
+    ├── loggers/          <- Logging utilities drivers.
+    ├── message/          <- Message broker drivers (RabbitMQ).
+    └── utils/            <- Additional utilities and helpers for infrastructure-related tasks.
 
 ```
 
@@ -76,17 +77,17 @@ To start using the BuggyBuddy REST API Microservice, follow the steps below:
 
 2. Once the running is complete, you can interact with the system through the following endpoints:
 
-- **GET /reports**: Retrieve details of a specific bug report by its ID.
-- **GET /reports/similar**: Retrieve recommendations for similar bug reports based on the provided ID.
-- **POST /reports**: Submit a new bug report to the system.
-- **PUT /reports**: Submit a new bug report to the system.
-- **DELETE /reports**: Submit a new bug report to the system.
+- **GET /reports**: Retrieve bug reports by specific filters such id, component, platform, etc. (*require req. body*).
+- **GET /reports/similar**: Retrieve 10 most similar bug reports (*require req. body*).
+- **POST /reports**: Create a new bug report (*require req. body*).
+- **PUT /reports/{report_id}**: Update a bug report (*require req. body*).
+- **DELETE /reports/{report_id}**: Delete a bug report.
 
 The details can be found by accessing Swagger UI dashboard (**/docs**).
 
 ## Event Messaging
 
-This microservice uses RabbitMQ event publised by the [ETL microservice]() which that inform new model is available then trigger new model loading from S3 Bucket. Below are *exchange*, *route*, and *data* of the subscribed message:
+This microservice subscribes to RabbitMQ events published by the [Model Builder Microservice](). These events inform when a new model is available, triggering the loading of the new model from the S3 Bucket. Below are the *exchange*, *route*, and *data* of the subscribed message.
 
 ```bash
     exchange: 'train_service',
