@@ -87,7 +87,7 @@ The details can be found by accessing Swagger UI dashboard (**/docs**).
 
 ## Event Messaging
 
-This microservice subscribes to RabbitMQ events published by the [Model Builder Microservice](https://github.com/uknow19/BuggyBuddy-Model-Builder-Microservice). These events inform when a new model is available, triggering the loading of the new model from the S3 Bucket. Below are the *exchange*, *route*, and *data* of the subscribed message.
+This microservice subscribes to RabbitMQ events published by the [BuggyBuddy Model Builder Microservice](https://github.com/uknow19/BuggyBuddy-Model-Builder-Microservice). These events inform when a new model is available, triggering the loading of the new model from the S3 Bucket. Below are the *exchange*, *route*, and *data* of the subscribed message.
 
 ```bash
     exchange: 'train_service',
