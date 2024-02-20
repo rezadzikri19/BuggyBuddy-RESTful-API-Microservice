@@ -11,11 +11,11 @@ def get_requirements(file_path: str) -> List[str]:
   return requirements
 
 setup(
-  name='Rest API Application for Duplicated Bug Report Detection',
+  name='BuggyBuddy RESTful API Microservice',
   version='0.1',
   author='Reza Dzikri',
   author_email='rezadzikri@gmail.com',
-  description='Rest API application for duplicated bug report detection design with scalable and maintainable clean architecture.',
+  description='Rest API application for BuggyBuddy project',
   packages=find_packages(),
   install_requires=get_requirements('requirements.txt'),
   license='MIT',
