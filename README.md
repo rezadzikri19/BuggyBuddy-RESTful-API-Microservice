@@ -2,7 +2,7 @@
 
 ## Overview
 
-The **BuggyBuddy REST API Microservice** plays a crucial role in the [BuggyBuddy](http://example.com) project, functioning as a RESTful API application designed to seamlessly integrate with various types of projects. Developed using FastAPI and integrated with Swagger documentation, it provides a powerful and user-friendly interface for building and interacting with REST APIs.
+The **BuggyBuddy REST API Microservice** plays a crucial role in the [BuggyBuddy](https://github.com/rezadzikri19/BuggyBuddy) project, functioning as a RESTful API application designed to seamlessly integrate with various types of projects. Developed using FastAPI and integrated with Swagger documentation, it provides a powerful and user-friendly interface for building and interacting with REST APIs.
 
 ## Features
 
@@ -87,7 +87,7 @@ The details can be found by accessing Swagger UI dashboard (**/docs**).
 
 ## Event Messaging
 
-This microservice subscribes to RabbitMQ events published by the [BuggyBuddy Model Builder Microservice](https://github.com/uknow19/BuggyBuddy-Model-Builder-Microservice). These events inform when a new model is available, triggering the loading of the new model from the S3 Bucket. Below are the *exchange*, *route*, and *data* of the subscribed message.
+This microservice subscribes to RabbitMQ events published by the [BuggyBuddy Model Builder Microservice](https://github.com/rezadzikri19/BuggyBuddy-Model-Builder-Microservice). These events inform when a new model is available, triggering the loading of the new model from the S3 Bucket. Below are the *exchange*, *route*, and *data* of the subscribed message.
 
 ```bash
     exchange: 'train_service',
